@@ -17,11 +17,11 @@ public class FlavorRequestQueue {
     }
 
     public Flavor nextNeededFlavor() {
-        Flavor flavor = flavorQueue.poll();
+        Flavor flavor = pollNeededFlavour();
         while (flavor == null) {
             try {
                 Thread.sleep(10L);
-                flavor = flavorQueue.poll();
+                flavor = pollNeededFlavour();
             } catch (InterruptedException e) {
                 System.out.println("!!!Interrupted waiting for flavor request!!!");
                 e.printStackTrace();
@@ -29,6 +29,9 @@ public class FlavorRequestQueue {
             }
         }
         return flavor;
+    }
+    private synchronized Flavor pollNeededFlavour() {
+        return flavorQueue.poll();
     }
 
     public int requestCount() {
